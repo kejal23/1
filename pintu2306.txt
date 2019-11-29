@@ -1,0 +1,680 @@
+server.php
+
+
+<?php
+
+$db = mysqli_connect('localhost', 'root', '', 'crud');
+
+if($db)
+{
+	echo "connection suceesfull";
+}
+else
+{
+	echo "not login";
+}
+?>
+
+
+index.php
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<title>CRUD: CReate, Update, Delete PHP MySQL</title>
+</head>
+<body>
+	<form method="post" action="login.php" name="abc">
+		<div class="input-group">
+			<label>name</label>
+			<input type="text" name="name" value="" required>
+		</div>
+		<div class="input-group">
+			<label>Address</label>
+			<input type="text" name="address" required>
+		</div>
+		<div class="input-group">
+			<label>phonno</label>
+			<input type="number" name="phonno" value="" pattern=".{,10} >
+		</div>
+		<div class="input-group">
+			<label>email</label>
+			<input type="email" name="email" value="" required>
+		</div>
+		<div class="input-group">
+			<label>password</label>
+			<input type="password" name="password" value="" pattern=".{6,}">
+		</div>
+		<div class="input-group">
+			<button class="btn" type="submit" name="save">Save</button>
+		</div>
+	</form>
+<?php
+
+		//session_start();
+	$db = mysqli_connect('localhost', 'root', '', 'crud');
+
+	// initialize variables
+	$name = "";
+	$address = "";
+	$phonno = "";
+	$email = "";
+	$password = "";
+	$id = 0;
+	$update = false;
+
+	if (isset($_POST['save'])) {
+		$name = $_POST['name'];
+		$address = $_POST['address'];
+		$phonno = $_POST['phonno'];
+		$email = $_POST['email'];
+		$password = $_POST['password'];
+		mysqli_query($db, "INSERT INTO info (name, address, phonno, email, password) VALUES ('$name', '$address', '$phonno', '$email', '$password')"); 
+		// $_SESSION['message'] = "Address saved"; 
+		header('location: viwe.php');
+	}
+	?>
+
+</body>
+</html>
+
+
+book.php
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+	<link rel="stylesheet" type="text/css" href="style.css">
+	
+                <title>CRUD: CReate, Update, Delete PHP MySQL</title>
+
+</head>
+
+<body>
+
+	<form method="post" action="" name="abc">
+	
+	<div class="input-group">
+			
+                <label>Book_Title</label>
+			
+                <input type="text" name="bt" value="" required>
+		
+                 </div>
+		
+             
+               <div class="input-group">
+			
+               <label>price</label>
+			
+               <input type="number" name="price" required>
+	
+	</div>
+
+<div class="input-group">
+	
+	
+               <input type="file" name="image" />
+
+                </div>
+
+
+	
+             <select name= "abc">
+  
+             <option value="abc">abc</option>
+ 
+             <option value="pqr">pqr</option>
+
+              </select> 
+		
+
+          <div class="input-group">
+			
+          <button class="btn" type="submit" name="save">Save</button>
+	
+          </div>
+	
+          </form>
+          
+</body>
+           
+
+<?php
+   if(isset($_FILES['image']))
+          {
+     
+               $errors= array();
+      
+               $file_name = $_FILES['image']['name'];
+   
+                $file_size =$_FILES['image']['size'];
+     
+                $file_tmp =$_FILES['image']['tmp_name'];
+    
+                $file_type=$_FILES['image']['type'];
+   
+               $file_ext=strtolower(end(explode('.',$_FILES['image']['name'])));
+      
+     
+               $extensions= array("jpeg","jpg","png");
+      
+     
+               if(in_array($file_ext,$extensions)=== false){
+        
+               $errors[]="extension not allowed, please choose a JPEG or PNG file.";
+     
+              }
+      
+      
+               if($file_size > 2097152){
+    
+                  $errors[]='File size must be excately 2 MB';
+      }
+      
+ 
+                     if(empty($errors)==true){
+       
+                    move_uploaded_file($file_tmp,"images/".$file_name);
+        
+                    echo "Success";
+    
+                     }else
+                     {
+         print_r($errors);
+      }
+  
+                     }
+
+?>
+
+                    
+
+<?php
+
+		
+                    //session_start();
+	
+                     $db = mysqli_connect('localhost', 'root', '', 'crud');
+
+	
+                        // initialize variables
+	
+                         $name = "";
+	
+                         $address = "";
+	
+                          $phonno = "";
+	
+                           $email = "";
+	
+                             $password = "";
+	
+                             $id = 0;
+	
+                            $update = false;
+
+	
+                        if (isset($_POST['save'])) {
+		
+                           $bt = $_POST['bt'];
+		
+                          $price = $_POST['price'];
+	
+                  	$img = $_POST['image'];
+		
+                            $abc = $_POST['abc'];
+	
+
+
+		
+                     mysqli_query($db, "INSERT INTO book (bt, price, img, author) VALUES ('$bt', '$price', '$img', '$abc')"); 
+		// $_SESSION['message'] = "Address saved"; 
+		
+                   header('location: viwe.php');
+	}
+
+	
+?>
+
+
+</html>
+
+
+
+
+
+login.php
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<style>
+a:link, a:visited {
+  background-color: #f44336;
+  color: white;
+  padding: 12px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+
+a:hover, a:active {
+  background-color: red;
+}
+</style>
+	<title></title>
+</head>
+<body>
+<form method="post" action="viwe.php" >
+		<div class="input-group">
+			<label>email</label>
+			<input type="email" name="email" value="">
+		</div>
+		<div class="input-group">
+			<label>password</label>
+			<input type="password" name="password" value="" pattern=".{6,}">
+		</div>
+		<div class="input-group">
+			<button class="btn" type="submit" name="save" >Sing in</button>
+			<a href="index.php">Sing Up</a>
+
+		</div>
+	</form>
+<?php
+
+		//session_start();
+	$db = mysqli_connect('localhost', 'root', '', 'crud');
+
+	if (isset($_POST['save'])) {
+		$email = $_POST['email'];
+
+
+		$password = $_POST['password'];
+		$a = mysqli_query($db, "select email, password from info where email= '$email' and password= '$password'"); 
+			if (count($a) == 1 ) {
+			$n = mysqli_fetch_array($a);
+			$email = $n['email'];
+
+			session_start();
+	     	$_SESSION['login_user']= $email;
+		    
+			$password = $n['password'];
+		}
+		else{
+			echo "not login";
+		}
+		
+	}
+
+	?>
+
+     
+
+</body>
+</html>
+
+
+view.php
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<style>
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even){background-color: #f2f2f2}
+
+th {
+  background-color: #4CAF50;
+  color: white;
+}
+</style>
+	<title></title>
+</head>
+<body>
+	<a href="boook.php" style="width: 30px; height: 30px; background-color: green">Add Book Detail</a>
+
+<?php 
+session_start();
+echo "email:-" . $_SESSION["login_user"] . ".<br>";
+?>
+
+
+<?php
+
+$db = mysqli_connect('localhost', 'root', '', 'crud');
+
+ $results = mysqli_query($db, "SELECT * FROM book"); ?>
+
+<table border="2">
+	<thead>
+		<tr><th>id</th>
+			<th>Book_Title</th>
+			<th>price</th>
+			<th>img</th>
+			<th>author</th>
+			<th colspan="2">Action</th>
+		</tr>
+	</thead>
+	
+	<?php while ($row = mysqli_fetch_array($results)) { ?>
+		
+		<tr>
+			<td><?php echo $row['id']; ?></td>
+			<td><?php echo $row['bt']; ?></td>
+			<td><?php echo $row['price']; ?></td>
+			<td><?php echo $row['img']; ?></td>
+			<td><?php echo $row['author']; ?></td>
+			<td>
+				<a href="update.php?edit=<?php echo $row['id']; ?>" class="edit_btn" >Edit</a>
+			</td>
+			<td>
+				<a href="delete.php?del=<?php echo $row['id']; ?>" class="del_btn">Delete</a>
+			</td>
+		</tr>
+	<?php } ?>
+</table>
+<a href="login.php" style="width: 30px; height: 30px; background-color: green">logout</a>
+</body>
+</html>
+
+
+view.php
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<div>
+	<label>Author</label>
+	<input type="text" name="author">
+	<button type="submit" name="save">search</button>
+
+<?php
+
+$db = mysqli_connect('localhost', 'root', '', 'crud');
+
+
+if (isset($_POST['save'])) {
+     $author = $_POST['author'];
+
+	}
+
+ $results = mysqli_query($db, "SELECT * FROM book where author='$author'"); ?>
+
+<table border="2">
+	<thead>
+		<tr><th>id</th>
+			<th>Book_Title</th>
+			<th>price</th>
+			<th>img</th>
+			<th>author</th>
+			<th colspan="2">Action</th>
+		</tr>
+	</thead>
+	<?php while ($row = mysqli_fetch_array($results)) { ?>
+		<tr>
+			<td><?php echo $row['id']; ?></td>
+			<td><?php echo $row['bt']; ?></td>
+			<td><?php echo $row['price']; ?></td>
+			<td><?php echo $row['img']; ?></td>
+			<td><?php echo $row['author']; ?></td>
+			<td>
+				<a href="update.php?edit=<?php echo $row['id']; ?>" class="edit_btn" >Edit</a>
+			</td>
+			<td>
+				<a href="delete.php?del=<?php echo $row['id']; ?>" class="del_btn">Delete</a>
+			</td>
+		</tr>
+	<?php } ?>
+</table>
+?>
+
+</div>
+</body>
+</html>
+
+
+
+
+update.php
+
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="style.css">
+	<title></title>
+</head>
+<body>
+<?php 
+
+$db = mysqli_connect('localhost', 'root', '', 'crud');
+	if (isset($_GET['edit'])) {
+		$id = $_GET['edit'];
+		$update = true;
+		$record = mysqli_query($db, "SELECT * FROM book WHERE id=$id");
+
+		if (count($record) == 1 ) {
+			$n = mysqli_fetch_array($record);
+			$a = $n['bt'];
+			//echo "$name";
+			$b = $n['price'];
+			//echo "$address";
+			$c = $n['img'];
+			//echo "$phonno";
+			$d = $n['author'];
+			
+		}
+	}
+?>
+
+<form method="post" action="viwe.php" >
+	<dir class="input-group">
+		<input type="hidden" name="id" value="<?php echo $id; ?>">
+	</dir>
+		<div class="input-group">
+			<label>Book_Title</label>
+			<input type="text" name="name" value="<?php echo $a; ?>">
+		</div>
+		<div class="input-group">
+			<label>Price</label>
+			<input type="text" name="address" value="<?php echo $b; ?>">
+		</div>
+		<div class="input-group">
+	
+	<input type="file" name="image" value="<?php echo $c; ?>" />
+</div>
+<select name= "abc">
+  <option value="abc">abc</option>
+  <option value="pqr">pqr</option>
+</select> 
+		<div class="input-group">
+			<?php if ($update == true): ?>
+	<button class="btn" type="submit" name="update" style="background: #556B2F;" >update</button>
+<?php else: ?>
+	<button class="btn" type="submit" name="save" >Save</button>
+<?php endif ?>	
+
+	</div>
+	</form>
+
+<?php
+   if(isset($_FILES['image'])){
+      $errors= array();
+      $file_name = $_FILES['image']['name'];
+      $file_size =$_FILES['image']['size'];
+      $file_tmp =$_FILES['image']['tmp_name'];
+      $file_type=$_FILES['image']['type'];
+      $file_ext=strtolower(end(explode('.',$_FILES['image']['name'])));
+      
+      $extensions= array("jpeg","jpg","png");
+      
+      if(in_array($file_ext,$extensions)=== false){
+         $errors[]="extension not allowed, please choose a JPEG or PNG file.";
+      }
+      
+      if($file_size > 2097152){
+         $errors[]='File size must be excately 2 MB';
+      }
+      
+      if(empty($errors)==true){
+         move_uploaded_file($file_tmp,"images/".$file_name);
+         echo "Success";
+      }else{
+         print_r($errors);
+      }
+   }
+?>
+
+
+<?php
+
+		//session_start();
+	$db = mysqli_connect('localhost', 'root', '', 'crud');
+
+	// initialize variables
+
+
+	if (isset($_POST['save'])) {
+		$bt = $_POST['bt'];
+		$price = $_POST['price'];
+		$img = $_POST['image'];
+		$abc = $_POST['abc'];
+	
+       mysqli_query($db, "UPDATE book SET bt='$bt', price='$price', img='$img', author= '$author' WHERE id=$id");
+
+		// $_SESSION['message'] = "Address saved"; 
+		//header('location: index.php');
+	}
+
+	?>
+</body>
+</html>
+
+delete.php
+
+<?php
+$db = mysqli_connect('localhost', 'root', '', 'crud');        
+
+if (isset($_GET['del'])) {
+		$id = $_GET['del'];
+		echo "$id";
+		$update = true;
+		$record = mysqli_query($db, "Delete from book WHERE id=$id");
+
+		if($record){
+
+			echo "delet suceess";
+			header("Location:viwe.php");
+		}
+		else
+		{
+			echo "not delete";
+		}
+
+	}	
+  ?>
+
+
+style.css
+body {
+    font-size: 19px;
+}
+table{
+    width: 50%;
+    margin: 30px auto;
+    border-collapse: collapse;
+    text-align: left;
+}
+tr {
+    border-bottom: 1px solid #cbcbcb;
+}
+th, td{
+    border: none;
+    height: 30px;
+    padding: 2px;
+}
+tr:hover {
+    background: #F5F5F5;
+}
+
+form {
+    width: 45%;
+    margin: 50px auto;
+    text-align: left;
+    padding: 20px; 
+    border: 1px solid #bbbbbb; 
+    border-radius: 5px;
+}
+
+.input-group {
+    margin: 10px 0px 10px 0px;
+}
+.input-group label {
+    display: block;
+    text-align: left;
+    margin: 3px;
+}
+.input-group input {
+    height: 30px;
+    width: 93%;
+    padding: 5px 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid gray;
+}
+.btn {
+    padding: 10px;
+    font-size: 15px;
+    color: white;
+    background: #5F9EA0;
+    border: none;
+    border-radius: 5px;
+}
+.edit_btn {
+    text-decoration: none;
+    padding: 2px 5px;
+    background: #2E8B57;
+    color: white;
+    border-radius: 3px;
+}
+
+.del_btn {
+    text-decoration: none;
+    padding: 2px 5px;
+    color: white;
+    border-radius: 3px;
+    background: #800000;
+}
+.msg {
+    margin: 30px auto; 
+    padding: 10px; 
+    border-radius: 5px; 
+    color: #3c763d; 
+    background: #dff0d8; 
+    border: 1px solid #3c763d;
+    width: 50%;
+    text-align: center;
+}
